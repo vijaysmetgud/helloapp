@@ -1,13 +1,23 @@
 pipeline {
     agent { label 'worker1' }
 
+    options {
+        skipDefaultCheckout()   // disable automatic Jenkins checkout
+    }
+
     environment {
         DOCKERHUB_USER = "vsmetgud"
     }
 
     stages {
+
         stage('Checkout') {
-            steps { git clone 'https://github.com/vijaysmetgud/helloapp.git' }
+            steps {
+                git(
+                    branch: 'main',
+                    url: 'https://github.com/vijaysmetgud/helloapp.git'
+                )
+            }
         }
 
         stage('Build Docker Image') {
