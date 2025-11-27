@@ -25,15 +25,22 @@ pipeline {
                 sh 'docker build -t $DOCKERHUB_USER/flask-app:latest .'
             }
         }
-
+        
         stage('Push to DockerHub') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'PASS')]) {
-                    sh 'echo $PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                    sh 'docker push $DOCKERHUB_USER/flask-app:latest'
-                }
-            }
+                 withCredentials([
+                 usernamePassword(
+                 credentialsId: 'dockerhub-pass',
+                 usernameVariable: 'DOCKERHUB_USER',
+                 passwordVariable: 'DOCKERHUB_PASS'
+            )
+        ]) {
+            sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+            sh 'docker push $DOCKERHUB_USER/flask-app:latest'
         }
+    }
+}
+
 
         stage('Deploy to Kubernetes') {
             steps {
