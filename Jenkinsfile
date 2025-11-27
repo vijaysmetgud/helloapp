@@ -7,7 +7,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps { git 'https://github.com/vijaysmetgud/helloapp.git' }
+            steps { git clone 'https://github.com/vijaysmetgud/helloapp.git' }
         }
 
         stage('Build Docker Image') {
